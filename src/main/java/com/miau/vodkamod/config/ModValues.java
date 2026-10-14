@@ -120,6 +120,44 @@ public final class ModValues {
      */
     public static final double VAGABOND_VODKA_DROP_CHANCE = 0.5D;
 
+    // ---------------------------------------------------------------------
+    // Spawn natural del vagabundo
+    // ---------------------------------------------------------------------
+
+    /**
+     * Si es {@code true}, el vagabundo puede aparecer también a plena luz del
+     * día (al aire libre). Si es {@code false}, solo aparece en la oscuridad,
+     * como el resto de monstruos.
+     * <p>
+     * Esto controla la "regla de spawn" (clase {@code VagabondEntity}); los
+     * sitios donde aparece se definen en el biome modifier
+     * {@code data/vodka_mod/forge/biome_modifier/vagabond_spawns.json}.
+     */
+    public static final boolean VAGABOND_SPAWN_IN_DAYLIGHT = true;
+
+    /**
+     * Peso del spawn natural (cuanto más alto, más frecuente respecto al resto
+     * de monstruos del grupo).
+     * <p>
+     * Referencia vanilla: zombi {@code 90}, esqueleto/araña/creper {@code 100}.
+     * El valor real está en el biome modifier
+     * {@code data/vodka_mod/forge/biome_modifier/vagabond_spawns.json} ("weight").
+     * Mantén ambos sincronizados.
+     */
+    public static final int VAGABOND_SPAWN_WEIGHT = 30;
+
+    /**
+     * Tamaño mínimo del grupo al aparecer. El valor real está en el biome
+     * modifier ("count"), campo {@code min_inclusive}.
+     */
+    public static final int VAGABOND_SPAWN_MIN = 1;
+
+    /**
+     * Tamaño máximo del grupo al aparecer. El valor real está en el biome
+     * modifier ("count"), campo {@code max_inclusive}.
+     */
+    public static final int VAGABOND_SPAWN_MAX = 2;
+
     /** Convierte segundos a ticks de Minecraft. */
 
     public static int ticks(int seconds) {

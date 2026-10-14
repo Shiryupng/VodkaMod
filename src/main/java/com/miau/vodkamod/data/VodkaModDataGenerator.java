@@ -5,11 +5,16 @@ import com.miau.vodkamod.VodkaMod;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtIo;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Generador de datos del mod.
@@ -17,17 +22,10 @@ import java.nio.file.Path;
  * Genera automáticamente el NBT de la estructura
  * {@code data/vodka_mod/structure/metal_bench.nbt} (banco de metal + farola +
  * spawner del vagabundo). Se ejecuta con {@code gradlew runData}.
- * <p>
- * El spawner usa {@code SpawnPotentials} para que:
- * <ul>
- *   <li>100 % de las veces aparezca al menos 1 vagabundo</li>
- *   <li>Con 33 % de probabilidad aparezcan 2 vagabundos</li>
- * </ul>
  */
 @Mod.EventBusSubscriber(modid = VodkaMod.MODID)
 public final class VodkaModDataGenerator {
     private VodkaModDataGenerator() {
-        // Solo eventos estáticos; no se instancia.
     }
 
     @SubscribeEvent
@@ -35,13 +33,9 @@ public final class VodkaModDataGenerator {
         if (!event.includeServer()) {
             return;
         }
-
         event.getGenerator().addProvider(true, new MetalBenchStructureProvider(event.getGenerator()));
     }
 
-    /**
-     * Proveedor de datos que escribe el NBT de la estructura metal_bench.
-     */
     private static final class MetalBenchStructureProvider implements net.minecraft.data.DataProvider {
         private final net.minecraft.data.DataGenerator generator;
 
@@ -51,18 +45,14 @@ public final class VodkaModDataGenerator {
 
         @Override
         public java.util.concurrent.CompletableFuture<?> run(net.minecraft.data.CachedOutput cache) {
-            // Escribir directamente en src/main/resources para que persista
-            // (ForgeGradle limpia la carpeta de salida por su sistema de caché)
             Path output = Path.of("..", "src/main/resources/data/vodka_mod/structure/metal_bench.nbt");
-
             try {
                 java.nio.file.Files.createDirectories(output.getParent());
-                net.minecraft.nbt.NbtIo.writeCompressed(buildMetalBenchStructure(), output);
+                NbtIo.writeCompressed(buildMetalBenchStructure(), output);
                 System.out.println("[VodkaMod] Estructura generada: " + output.toAbsolutePath());
             } catch (Exception e) {
                 throw new RuntimeException("No se pudo guardar metal_bench.nbt", e);
             }
-
             return java.util.concurrent.CompletableFuture.completedFuture(null);
         }
 
@@ -80,12 +70,8 @@ public final class VodkaModDataGenerator {
      *             └──── banco ────┘            └─ farola ─┘
      * </pre>
      * <p>
-     * El spawner tiene {@code SpawnPotentials} con:
-     * <ul>
-     *   <li>weight 67 → count 1 (67 % de las veces spawnea 1 vagabundo)</li>
-     *   <li>weight 33 → count 2 (33 % de las veces spawnea 2 vagabundos)</li>
-     * </ul>
-     * Así, el 100 % de las veces aparece al menos 1 vagabundo.
+     * Usa {@link NbtUtils#addCurrentDataVersion} para que el DataVersion sea
+     * el correcto para la versión actual del juego.
      */
     private static CompoundTag buildMetalBenchStructure() {
         int sizeX = 3;
@@ -103,36 +89,38 @@ public final class VodkaModDataGenerator {
         palette.add(blockState("minecraft:lantern"));
         palette.add(blockState("minecraft:mob_spawner"));
 
+        // NBT del spawner con SpawnPotentials
         CompoundTag spawnerNbt = buildVagabondSpawner();
 
-        ListTag blocks = new ListTag();
-        blocks.add(blockTag(0, 0, 0, 0, null));       // iron_block
-        blocks.add(blockTag(1, 0, 0, 0, null));       // iron_block
-        blocks.add(blockTag(2, 0, 0, 2, null));       // lantern (farola)
-        blocks.add(blockTag(0, 1, 0, 3, spawnerNbt)); // mob_spawner
+        // Bloques
+        ListTag blockList = new ListTag();
+        blockList.add(blockTag(0, 0, 0, 0, null));           // iron_block
+        blockList.add(blockTag(1, 0, 0, 0, null));           // iron_block
+        blockList.add(blockTag(2, 0, 0, 2, null));           // lantern
+        blockList.add(blockTag(0, 1, 0, 3, spawnerNbt));     // mob_spawner
 
+        // Tag raíz
         CompoundTag root = new CompoundTag();
-        root.putInt("DataVersion", 3105);
-        root.put("size", intList(sizeX, sizeY, sizeZ));
+
+        // size [x, y, z]
+        ListTag sizeTag = new ListTag();
+        sizeTag.add(IntTag.valueOf(sizeX));
+        sizeTag.add(IntTag.valueOf(sizeY));
+        sizeTag.add(IntTag.valueOf(sizeZ));
+        root.put("size", sizeTag);
+
         root.put("palette", palette);
-        root.put("blocks", blocks);
+        root.put("blocks", blockList);
         root.put("entities", new ListTag());
 
-        return root;
+        // Añadir DataVersion correcto automáticamente
+        return NbtUtils.addCurrentDataVersion(root);
     }
 
     private static CompoundTag blockState(String name) {
         CompoundTag tag = new CompoundTag();
         tag.putString("Name", name);
         return tag;
-    }
-
-    private static ListTag intList(int x, int y, int z) {
-        ListTag list = new ListTag();
-        list.add(IntTag.valueOf(x));
-        list.add(IntTag.valueOf(y));
-        list.add(IntTag.valueOf(z));
-        return list;
     }
 
     private static CompoundTag blockTag(int x, int y, int z, int state, CompoundTag nbt) {
@@ -145,15 +133,18 @@ public final class VodkaModDataGenerator {
         return tag;
     }
 
+    private static ListTag intList(int x, int y, int z) {
+        ListTag list = new ListTag();
+        list.add(IntTag.valueOf(x));
+        list.add(IntTag.valueOf(y));
+        list.add(IntTag.valueOf(z));
+        return list;
+    }
+
     /**
      * Construye el NBT de un spawner de vagabundos.
      * <p>
-     * Usa {@code SpawnPotentials} para que:
-     * <ul>
-     *   <li>67 % → spawnea 1 vagabundo</li>
-     *   <li>33 % → spawnea 2 vagabundos</li>
-     * </ul>
-     * El 100 % de las veces aparece al menos 1 vagabundo.
+     * 67 % → spawnea 1 vagabundo, 33 % → spawnea 2 vagabundos.
      */
     private static CompoundTag buildVagabondSpawner() {
         CompoundTag spawner = new CompoundTag();

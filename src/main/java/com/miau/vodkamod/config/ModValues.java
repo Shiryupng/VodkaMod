@@ -144,7 +144,7 @@ public final class ModValues {
      * {@code data/vodka_mod/forge/biome_modifier/vagabond_spawns.json} ("weight").
      * Mantén ambos sincronizados.
      */
-    public static final int VAGABOND_SPAWN_WEIGHT = 30;
+    public static final int VAGABOND_SPAWN_WEIGHT = 45;
 
     /**
      * Tamaño mínimo del grupo al aparecer. El valor real está en el biome

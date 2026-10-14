@@ -1,12 +1,12 @@
 {
   "type": "minecraft:jigsaw",
   "biomes": [
-    "#minecraft:has_structure/village_plains",
-    "#minecraft:has_structure/village_desert",
-    "#minecraft:has_structure/village_savanna",
-    "#minecraft:has_structure/village_taiga",
-    "#minecraft:has_structure/village_snowy",
-    "#minecraft:has_structure/village_swamp"
+    "minecraft:plains",
+    "minecraft:desert",
+    "minecraft:savanna",
+    "minecraft:taiga",
+    "minecraft:snowy_plains",
+    "minecraft:swamp"
   ],
   "step": "surface_structures",
   "spawn_overrides": {},

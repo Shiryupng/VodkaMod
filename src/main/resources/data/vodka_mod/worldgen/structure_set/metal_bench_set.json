@@ -1,0 +1,14 @@
+{
+  "structures": [
+    {
+      "structure": "vodka_mod:metal_bench",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1234567890,
+    "spacing": 24,
+    "separation": 20
+  }
+}

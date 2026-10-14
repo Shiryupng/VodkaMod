@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "vodka_mod:vodka_bottle"
+  },
+  "reagent": {
+    "item": "minecraft:potato"
+  },
+  "output": {
+    "id": "vodka_mod:vodka",
+    "count": 1
+  }
+}

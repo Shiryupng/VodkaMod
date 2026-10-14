@@ -1,0 +1,31 @@
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
+
+# Files from Forge MDK
+forge_README.txt
+forge*changelog.txt
+
+# Fuentes descompiladas (solo para consultar la API; no forman parte del mod)
+net/
+net.minecraft.data.recipes.BrewingProvider/
+net.minecraftforge.registries.DeferredRegister/

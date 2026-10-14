@@ -1,0 +1,12 @@
+{
+  "item.vodka_mod.vodka_bottle": "Empty Bottle",
+  "item.vodka_mod.vodka": "Vodka",
+  "item.vodka_mod.premium_vodka": "Premium Vodka",
+  "item.vodka_mod.broken_bottle": "Broken Bottle",
+  "item.vodka_mod.vagabond_spawn_egg": "Vagabond Spawn Egg",
+
+  "entity.vodka_mod.thrown_bottle": "Thrown Bottle",
+  "entity.vodka_mod.vagabond": "Vagabond",
+
+  "itemGroup.vodka_tab": "Vodka Mod"
+}

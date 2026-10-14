@@ -1,0 +1,26 @@
+modLoader="javafml"
+loaderVersion="[66,)"
+license="All Rights Reserved"
+
+[[mods]]
+modId="vodka_mod"
+version="1.0.0"
+displayName="Vodka Mod"
+authors="videojuegos"
+description='''
+Vodka production and consumption mod.
+Brew vodka in a brewing stand, drink it, and throw the empty bottle.'''
+
+[[dependencies.vodka_mod]]
+    modId="forge"
+    mandatory=true
+    versionRange="[66,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.vodka_mod]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[26.3,)"
+    ordering="NONE"
+    side="BOTH"

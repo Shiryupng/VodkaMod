@@ -27,7 +27,7 @@ public final class ModFeatures {
     public static final DeferredRegister<MapCodec<? extends Feature>> FEATURES =
         DeferredRegister.create(Registries.FEATURE_TYPE, VodkaMod.MODID);
 
-    /** Tipo de feature del banco de metal (banco + farola + spawner). */
+    /** Tipo de feature del banco de metal (banco + farola + vagabundo). */
     public static final RegistryObject<MapCodec<? extends Feature>> METAL_BENCH =
         FEATURES.register("metal_bench", () -> MetalBenchFeature.CODEC);
 }

@@ -12,7 +12,7 @@ Java 25, Gradle, estructura oficial del MDK de Forge 26.3.
 | `vodka_mod:vagabond` | Vagabundo: mob hostil que lleva la botella rota y suelta vodka (50 %) |
 | `vodka_mod:vagabond_spawn_egg` | Huevo de spawn: invoca al vagabundo sin escribir comandos |
 | Pestaña `Vodka Mod` | Botella, vodka, vodka premium, botella rota y huevo de vagabundo (en ese orden) |
-| Banco de metal | Estructura que aparece **dentro de las aldeas**: banco de hierro + farola + spawner de vagabundos |
+| Banco de metal | Estructura que aparece **dentro de las aldeas**: banco de hierro + farola + un vagabundo |
 
 ---
 
@@ -75,14 +75,16 @@ Para instalarlo: cópia ese `.jar` en la carpeta `mods` de tu perfil de Forge 26
 
 En las aldeas aparece una pequeña estructura: un **banco de dos bloques de
 hierro**, una **farola** (valla de roble con una linterna encima) al lado y un
-**spawner** colocado sobre el banco configurado con el **vagabundo**.
+**vagabundo** que se genera de pie sobre el banco.
 
 ```
-   y+1:   [spawner]            [linterna]
+   y+1:   [vagabundo]          [linterna]
    y+0:   [hierro][hierro]     [valla]
 ```
 
-El spawner genera siempre un **vagabundo**; no hace falta hacer nada más.
+El vagabundo es una **entidad** que se crea **al generarse la estructura** (no
+un spawner): así aparece **exactamente un vagabundo por banco** y se queda ahí
+(se marca como persistente para que no desaparezca al alejarte).
 
 ### Cómo se genera
 
@@ -92,12 +94,13 @@ aldeas ya tienen un pool de decoración (`minecraft:village/<tipo>/decor`) que
 coloca farolas, árboles, montones de heno… El mod **inyecta el banco en ese
 pool** como un elemento más:
 
-- El **feature** (`MetalBenchFeature`) coloca los bloques y configura el spawner
-  con el vagabundo; es código Java porque el spawner se configura al vuelo,
-  igual que en las mazmorras vanilla.
+- El **feature** (`MetalBenchFeature`) coloca los bloques y crea la entidad del
+  vagabundo; es código Java porque hay que crear la entidad durante la
+  generación del mundo (la misma vía que usan las estructuras vanilla, como la
+  bruja de la cabaña del pantano).
 - Los **archivos de datos** describen la feature y su "placed feature".
 
-No necesitas un bioma concretó ni comandos: el banco sale **dentro de las
+No necesitas un bioma concreto ni comandos: el banco sale **dentro de las
 aldeas** de forma natural en los 5 tipos (llanura, desierto, sabana, nevada y
 taiga), como cualquier otra decoración.
 
@@ -105,7 +108,7 @@ taiga), como cualquier otra decoración.
 
 | Archivo | Qué hace |
 |---|---|
-| `src/main/java/com/miau/vodkamod/worldgen/MetalBenchFeature.java` | Coloca el banco, la farola y el spawner; configura el vagabundo |
+| `src/main/java/com/miau/vodkamod/worldgen/MetalBenchFeature.java` | Coloca el banco y la farola; crea la entidad del vagabundo |
 | `src/main/java/com/miau/vodkamod/worldgen/ModFeatures.java` | Registra el **tipo** de feature (`worldgen/feature_type`) |
 | `data/vodka_mod/worldgen/feature/metal_bench.json` | Describe la instancia de la feature (`"type": "vodka_mod:metal_bench"`) |
 | `data/vodka_mod/worldgen/placed_feature/metal_bench.json` | Feature listo para colocarse (sin modificadores de posición) |
@@ -118,11 +121,14 @@ taiga), como cualquier otra decoración.
 ### Ajustar la frecuencia o el diseño
 
 - **Frecuencia**: cambia el `"weight"` del primer elemento en cada
-  `decor.json` (por defecto `2`). Cuanto mayor, más probable.
+  `decor.json` (por defecto `1`). Cuanto mayor, más probable. Con `1` salen
+  ~1-2 bancos por aldea (el sistema jigsaw no permite un tope fijo por aldea,
+  así que se controla por probabilidad: si quieres menos, sube el `weight` del
+  elemento `minecraft:empty_pool_element`).
 - **Diseño/bloques**: edita `MetalBenchFeature.place(...)` (bloques, tamaño y
-  altura). Si cambias la forma, deja el spawner en un bloque válido.
-- **Qué genera el spawner**: es el vagabundo por defecto; cámbialo en
-  `MetalBenchFeature` (`spawner.setEntityId(...)`).
+  altura).
+- **Qué entidad aparece**: el vagabundo por defecto; cámbialo en
+  `MetalBenchFeature` (`ModEntityTypes.VAGABOND`).
 
 Para probarlo sin generar una aldea entera:
 
@@ -291,7 +297,7 @@ src/main/java/com/miau/vodkamod/
 ├── event/ModEntityEvents.java    Atributos de los mobs (evento Forge)
 ├── effects/DrinkEffects.java     Efectos al beber
 ├── worldgen/
-│   ├── MetalBenchFeature.java    Banco + farola + spawner (decoración de aldea)
+│   ├── MetalBenchFeature.java    Banco + farola + vagabundo (decoración de aldea)
 │   └── ModFeatures.java          Registro del tipo de feature
 └── client/
     ├── ClientModEvents.java      Modelos y renderers (cliente)

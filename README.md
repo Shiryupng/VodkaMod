@@ -12,6 +12,7 @@ Java 25, Gradle, estructura oficial del MDK de Forge 26.3.
 | `vodka_mod:vagabond` | Vagabundo: mob hostil que lleva la botella rota y suelta vodka (50 %) |
 | `vodka_mod:vagabond_spawn_egg` | Huevo de spawn: invoca al vagabundo sin escribir comandos |
 | Pestaña `Vodka Mod` | Botella, vodka, vodka premium, botella rota y huevo de vagabundo (en ese orden) |
+| Banco de metal | Estructura que aparece **dentro de las aldeas**: banco de hierro + farola + spawner de vagabundos |
 
 ---
 
@@ -70,7 +71,68 @@ Para instalarlo: cópia ese `.jar` en la carpeta `mods` de tu perfil de Forge 26
 
 ---
 
-## 5. Dónde cambiar los valores (todo centralizado)
+## 5. El banco de metal (estructura en las aldeas)
+
+En las aldeas aparece una pequeña estructura: un **banco de dos bloques de
+hierro**, una **farola** (valla de roble con una linterna encima) al lado y un
+**spawner** colocado sobre el banco configurado con el **vagabundo**.
+
+```
+   y+1:   [spawner]            [linterna]
+   y+0:   [hierro][hierro]     [valla]
+```
+
+El spawner genera siempre un **vagabundo**; no hace falta hacer nada más.
+
+### Cómo se genera
+
+Minecraft 26.3 genera estructuras con el sistema **jigsaw**, que es totalmente
+**data-driven** (JSON + NBT, sin código Java para la estructura en sí). Las
+aldeas ya tienen un pool de decoración (`minecraft:village/<tipo>/decor`) que
+coloca farolas, árboles, montones de heno… El mod **inyecta el banco en ese
+pool** como un elemento más:
+
+- El **feature** (`MetalBenchFeature`) coloca los bloques y configura el spawner
+  con el vagabundo; es código Java porque el spawner se configura al vuelo,
+  igual que en las mazmorras vanilla.
+- Los **archivos de datos** describen la feature y su "placed feature".
+
+No necesitas un bioma concretó ni comandos: el banco sale **dentro de las
+aldeas** de forma natural en los 5 tipos (llanura, desierto, sabana, nevada y
+taiga), como cualquier otra decoración.
+
+### Archivos implicados
+
+| Archivo | Qué hace |
+|---|---|
+| `src/main/java/com/miau/vodkamod/worldgen/MetalBenchFeature.java` | Coloca el banco, la farola y el spawner; configura el vagabundo |
+| `src/main/java/com/miau/vodkamod/worldgen/ModFeatures.java` | Registra el **tipo** de feature (`worldgen/feature_type`) |
+| `data/vodka_mod/worldgen/feature/metal_bench.json` | Describe la instancia de la feature (`"type": "vodka_mod:metal_bench"`) |
+| `data/vodka_mod/worldgen/placed_feature/metal_bench.json` | Feature listo para colocarse (sin modificadores de posición) |
+| `data/minecraft/worldgen/template_pool/village/<tipo>/decor.json` | Los 5 pools de aldea sobrescritos para añadir el banco |
+
+> Los 5 JSON de `data/minecraft/...` **sustituyen** a los originales de Minecraft
+> (el formato datapack no fusiona listas). Si una versión futura cambia esos
+> pools, habría que actualizarlos copiando de nuevo el contenido vanilla.
+
+### Ajustar la frecuencia o el diseño
+
+- **Frecuencia**: cambia el `"weight"` del primer elemento en cada
+  `decor.json` (por defecto `2`). Cuanto mayor, más probable.
+- **Diseño/bloques**: edita `MetalBenchFeature.place(...)` (bloques, tamaño y
+  altura). Si cambias la forma, deja el spawner en un bloque válido.
+- **Qué genera el spawner**: es el vagabundo por defecto; cámbialo en
+  `MetalBenchFeature` (`spawner.setEntityId(...)`).
+
+Para probarlo sin generar una aldea entera:
+
+```
+/place feature vodka_mod:metal_bench ~ ~ ~
+```
+
+---
+
+## 6. Dónde cambiar los valores (todo centralizado)
 
 Archivo: **`src/main/java/com/miau/vodkamod/config/ModValues.java`**
 
@@ -105,7 +167,7 @@ Efectos actuales:
 * **Vodka**: Fuerza I 30 s, Nauseas 10 s, Debilidad I 20 s.
 * **Vodka premium**: Fuerza II 45 s, Resistencia I 30 s, Nauseas 30 s, Debilidad I 30 s.
 
-## 6. Cambiar las texturas (placeholders)
+## 7. Cambiar las texturas (placeholders)
 
 Las texturas actuales son de relleno (16×16, generadas). Sustituye estos archivos
 manteniendo el nombre y el tamaño:
@@ -157,7 +219,7 @@ o ruta, cambia esa constante.
 
 ---
 
-## 7. Recetas (datapack 26.3)
+## 8. Recetas (datapack 26.3)
 
 Todas las recetas viven en `src/main/resources/data/vodka_mod/recipe/`.
 En 26.3 el formato cambió respecto a versiones antiguas.
@@ -214,7 +276,7 @@ como válidos en la mesa de preparación.
 
 ---
 
-## 8. Estructura de paquetes
+## 9. Estructura de paquetes
 
 ```
 src/main/java/com/miau/vodkamod/
@@ -228,6 +290,9 @@ src/main/java/com/miau/vodkamod/
 ├── entity/VagabondEntity.java    Vagabundo: mob con botella rota
 ├── event/ModEntityEvents.java    Atributos de los mobs (evento Forge)
 ├── effects/DrinkEffects.java     Efectos al beber
+├── worldgen/
+│   ├── MetalBenchFeature.java    Banco + farola + spawner (decoración de aldea)
+│   └── ModFeatures.java          Registro del tipo de feature
 └── client/
     ├── ClientModEvents.java      Modelos y renderers (cliente)
     └── VagabondRenderer.java     Renderer del vagabundo
@@ -248,5 +313,8 @@ src/main/resources/
 ├── assets/vodka_mod/textures/entity/vagabond.png  Skin del vagabundo (64×64)
 ├── assets/vodka_mod/lang/        en_us.json y es_es.json
 ├── data/vodka_mod/recipe/        Recetas: botella (crafting) y destilación (brewing)
-└── data/vodka_mod/loot_table/entities/vagabond.json  Botín del vagabundo
+├── data/vodka_mod/loot_table/entities/vagabond.json  Botín del vagabundo
+├── data/vodka_mod/worldgen/feature/metal_bench.json        Feature del banco
+├── data/vodka_mod/worldgen/placed_feature/metal_bench.json Feature colocable
+└── data/minecraft/worldgen/template_pool/village/*/decor.json  Banco inyectado en aldeas
 ```

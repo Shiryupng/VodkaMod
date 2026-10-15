@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 import com.miau.vodkamod.registry.ModCreativeTabs;
 import com.miau.vodkamod.registry.ModEntityTypes;
 import com.miau.vodkamod.registry.ModItems;
+import com.miau.vodkamod.worldgen.ModFeatures;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
@@ -29,6 +30,7 @@ public final class VodkaMod {
         ModItems.ITEMS.register(modBusGroup);
         ModEntityTypes.ENTITY_TYPES.register(modBusGroup);
         ModCreativeTabs.CREATIVE_MODE_TABS.register(modBusGroup);
+        ModFeatures.FEATURES.register(modBusGroup);
 
         LOGGER.info("Vodka Mod cargado");
     }

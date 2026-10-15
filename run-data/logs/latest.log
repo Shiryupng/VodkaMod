@@ -1,0 +1,18 @@
+[14oct2026 13:11:49.928] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher running: args [--gameDir, ., --launchTarget, forge_userdev_data, --assetIndex, 34, --assetsDir, C:\Users\videojuegos\AppData\Roaming\.minecraft\assets, --mod, vodka_mod, --all, --output, C:\Users\videojuegos\Documents\Proyecto predeterminado\src\generated\resources, --existing, C:\Users\videojuegos\Documents\Proyecto predeterminado\src\main\resources]
+[14oct2026 13:11:49.929] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: JVM identified as Eclipse Adoptium OpenJDK 64-Bit Server VM 25.0.4.1+1-LTS
+[14oct2026 13:11:49.930] [main/INFO] [cpw.mods.modlauncher.Launcher/MODLAUNCHER]: ModLauncher 10.2.6 starting: java version 25.0.4.1 by Eclipse Adoptium; OS Windows 11 arch amd64 version 10.0
+[14oct2026 13:11:49.988] [main/INFO] [net.minecraftforge.fml.loading.ImmediateWindowHandler/]: ImmediateWindowProvider not loading because launch target is forge_userdev_data
+[14oct2026 13:11:50.042] [main/INFO] [mixin/]: SpongePowered MIXIN Subsystem Version=0.8.7 Source=jar:file:///C:/Users/videojuegos/.gradle/caches/modules-2/files-2.1/org.spongepowered/mixin/0.8.7/8ab114ac385e6dbdad5efafe28aba4df8120915f/mixin-0.8.7.jar!/ Service=ModLauncher Env=UNKNOWN
+[14oct2026 13:11:50.747] [main/INFO] [net.minecraftforge.fml.loading.moddiscovery.JarInJarDependencyLocator/]: No dependencies to load found. Skipping!
+[14oct2026 13:11:50.909] [main/INFO] [cpw.mods.modlauncher.LaunchServiceHandler/MODLAUNCHER]: Launching target 'forge_userdev_data' with arguments [--gameDir, ., --assetsDir, C:\Users\videojuegos\AppData\Roaming\.minecraft\assets, --assetIndex, 34, --mod, vodka_mod, --all, --output, C:\Users\videojuegos\Documents\Proyecto predeterminado\src\generated\resources, --existing, C:\Users\videojuegos\Documents\Proyecto predeterminado\src\main\resources]
+[14oct2026 13:11:54.888] [modloading-worker-0/INFO] [com.miau.vodkamod.VodkaMod/]: Vodka Mod cargado
+[14oct2026 13:11:54.889] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Forge mod loading, version 66.0.9, for MC 26.3 with MCP 20260918.230105
+[14oct2026 13:11:54.890] [modloading-worker-0/INFO] [net.minecraftforge.common.MinecraftForge/FORGE]: MinecraftForge v66.0.9 Initialized
+[14oct2026 13:11:54.914] [modloading-worker-0/INFO] [net.minecraftforge.common.ForgeMod/FORGEMOD]: Opening jdk.naming.dns/com.sun.jndi.dns to java.naming
+[14oct2026 13:11:55.040] [main/INFO] [net.minecraftforge.data.loading.DatagenModLoader/]: Initializing Data Gatherer for mods [vodka_mod]
+[14oct2026 13:11:55.100] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/videojuegos/Documents/Proyecto%20predeterminado/.gradle/mavenizer/repo/net/minecraftforge/forge/26.3-66.0.9/forge-26.3-66.0.9.jar%230!/assets/.mcassetsroot' uses unexpected schema
+[14oct2026 13:11:55.101] [main/WARN] [net.minecraft.server.packs.VanillaPackResourcesBuilder/]: Assets URL 'union:/C:/Users/videojuegos/Documents/Proyecto%20predeterminado/.gradle/mavenizer/repo/net/minecraftforge/forge/26.3-66.0.9/forge-26.3-66.0.9.jar%230!/data/.mcassetsroot' uses unexpected schema
+[14oct2026 13:11:55.226] [main/INFO] [net.minecraft.data.DataGenerator/]: Starting provider: VodkaMod Structure Generator
+[14oct2026 13:11:55.236] [main/INFO] [net.minecraft.data.DataGenerator/]: VodkaMod Structure Generator finished after 10 ms
+[14oct2026 13:11:55.237] [main/INFO] [net.minecraft.data.DataGenerator/]: All providers took: 11 ms
+[14oct2026 13:11:55.239] [main/INFO] [net.minecraft.data.HashCache/]: Caching: total files: 0, old count: 0, new count: 0, removed stale: 0, written: 0

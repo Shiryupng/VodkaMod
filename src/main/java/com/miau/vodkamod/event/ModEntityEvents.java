@@ -5,17 +5,22 @@ import com.miau.vodkamod.entity.VagabondEntity;
 import com.miau.vodkamod.registry.ModEntityTypes;
 
 import net.minecraft.world.entity.SpawnPlacementTypes;
+import net.minecraft.world.entity.animal.golem.IronGolem;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
 import net.minecraftforge.eventbus.api.listener.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
  * Eventos de entidades del mod.
  * <p>
- * Registra los atributos de cada mob propio. El evento es del bus del mod y se
- * dispara tanto en cliente como en servidor.
+ * Registra los atributos y las reglas de aparición del vagabundo y ajusta su
+ * relación con otras entidades (p. ej. impide que los gólems de hierro lo
+ * ataquen). {@code @Mod.EventBusSubscriber} usa el bus {@code BOTH}: cada método
+ * se enruta automáticamente al bus del mod o al bus de juego según el tipo de
+ * evento.
  */
 @Mod.EventBusSubscriber(modid = VodkaMod.MODID)
 public final class ModEntityEvents {
@@ -46,5 +51,26 @@ public final class ModEntityEvents {
             VagabondEntity::checkSpawnRules,
             SpawnPlacementRegisterEvent.Operation.REPLACE
         );
+    }
+
+    /**
+     * Evita que el <b>gólem de hierro</b> ataque al vagabundo.
+     * <p>
+     * El vagabundo es un {@link net.minecraft.world.entity.monster.Monster} (ataca
+     * a los jugadores), y el gólem de hierro ataca a todo {@code Enemy} cercano
+     * (ver {@code IronGolem}); por eso antes acababa matándolo. El vagabundo es,
+     * sin embargo, un vecino más del pueblo, así que aquí <b>cancelamos</b> el
+     * cambio de objetivo cuando el que apunta es un gólem de hierro y el
+     * objetivo es un vagabundo.
+     * <p>
+     * Devolver {@code true} cancela el evento (el gólem conserva su objetivo
+     * anterior, es decir, no adquiere al vagabundo). El parche se aplica a
+     * cualquier intento de fijar objetivo, tanto por la IA como al empujar
+     * ({@code IronGolem#doPush}).
+     */
+    @SubscribeEvent
+    public static boolean onLivingChangeTarget(LivingChangeTargetEvent event) {
+        return event.getNewTarget() instanceof VagabondEntity
+            && event.getEntity() instanceof IronGolem;
     }
 }

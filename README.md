@@ -60,7 +60,7 @@ Para instalarlo: cópia ese `.jar` en la carpeta `mods` de tu perfil de Forge 26
 3. **Beber**: clic derecho mantenido. Al terminar aplicará los efectos y **devolverá exactamente una botella vacía** (la botella nunca se pierde, aunque tengas el inventario lleno).
 4. **Lanzar**: clic derecho con la botella vacía en la mano. Impacta contra bloques y entidades (4 de daño = 2 corazones), se rompe y tiene un **50 % de probabilidad** de soltar una **botella rota**.
 5. **Botella rota**: arma cuerpo a cuerpo improvisada (5 de daño total, velocidad 2.0), pierde durabilidad al golpear y **se rompe a los 8 golpes**.
-6. **Vagabundo**: mob hostil que lleva una botella rota en la mano (con la **misma rotación que el jugador**) y ataca cuerpo a cuerpo. Al morir tiene un **50 % de probabilidad** de soltar **vodka**. Para invocarlo tienes dos opciones:
+6. **Vagabundo**: mob hostil que lleva una botella rota en la mano (con la **misma rotación que el jugador**) y ataca cuerpo a cuerpo. Al morir tiene un **50 % de probabilidad** de soltar **vodka**. Los **gólems de hierro no lo atacan** (a diferencia de otros monstruos), así que no muere a manos de los guardias de la aldea. Para invocarlo tienes dos opciones:
 
    - **Huevo de spawn**: usa el item **Huevo de vagabundo** (está en la pestaña *Vodka Mod*) con clic derecho sobre el suelo.
    - **Comando**:
@@ -294,7 +294,7 @@ src/main/java/com/miau/vodkamod/
 ├── item/VodkaBottleItem.java     Botella vacía: lanzamiento + proyectil
 ├── projectile/ThrownBottleEntity.java  Proyectil: daño, rotura, drop
 ├── entity/VagabondEntity.java    Vagabundo: mob con botella rota
-├── event/ModEntityEvents.java    Atributos de los mobs (evento Forge)
+├── event/ModEntityEvents.java    Atributos, spawn y relación con gólems (eventos Forge)
 ├── effects/DrinkEffects.java     Efectos al beber
 ├── worldgen/
 │   ├── MetalBenchFeature.java    Banco + farola + vagabundo (decoración de aldea)
